@@ -1,0 +1,39 @@
+pipelines:
+  - PostgresToBigQuery:
+      DisplayName: "Postgres To BigQuery Pipeline"
+      Description: "Sample pipeline that reads data from a PostgreSQL database and writes it to BigQuery"
+      Id: "pg2bq_1"
+      DataSource:
+        PostgreSQLConfig:
+          Host: "localhost"
+          Port: 5432
+          Database: "Postgres"
+          BasicAuth:
+            User: "admin"
+            Password: "root"
+          RawQuery: "SELECT user_id, order_id, order_date, item_price, item_id, item_quantity FROM order_items;"
+      Transformations:
+        - RenameColumn:
+          - OldColumnName: "user_email"
+            NewColumnName: "email"
+        - WithColumn:
+            Name: "item_total_price"
+            Value: "item_price * item_quantity"
+        - DropColumn: "item_quantity"
+        - DropColumn: "item"
+        - GroupBy:
+            Columns:
+              - "user_id"
+            Aggregations:
+              - Count
+        - AddInsertTimestamp
+      DataSink:
+        BigQueryConfig:
+          Project: "test-project"
+          Dataset: "test-dataset"
+          Table: "test-table"
+          ServiceAccountAuth:
+            ServiceAccountFile: "opt/shared/service_accounts/testing_service_accounts.json"
+          MergeQuery:
+            UniqueKey:
+              - "user_id"
