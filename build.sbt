@@ -11,7 +11,7 @@ val sparkVersion = "4.1.1"
 
 libraryDependencies ++= Seq(
   // YAML Parsing
-  "org.yaml" % "snakeyaml" % "2.6",
+  "io.circe" %% "circe-yaml" % "1.15.0",
   // Spark
   "org.apache.spark" %% "spark-core" % sparkVersion,
   "org.apache.spark" %% "spark-sql" % sparkVersion,

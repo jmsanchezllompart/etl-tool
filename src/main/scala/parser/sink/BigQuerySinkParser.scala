@@ -1,39 +1,38 @@
 package parser.sink
 
-import core.sink.{Append, AppendMode, BigQuerySink, DataSink}
+import core.auth.Auth
+import core.sink.{Append, BigQuerySink, DataSink}
+import io.circe.ACursor
+import parser.Parser
 import parser.auth.AuthParserRegistry
+import parser.helpers.Helpers.parseSubField
 
-import scala.jdk.CollectionConverters.MapHasAsScala
 
-object BigQuerySinkParser extends DataSinkParser {
+object BigQuerySinkParser extends Parser[DataSink] {
   override def name: String = "BigQuerySink"
 
-  override def parse(value: Any): DataSink = {
-    val map = value
-      .asInstanceOf[java.util.Map[String, Object]]
-      .asScala
-
-    val authMap = map
-      .getOrElse(
-        "Auth",
-        throw new IllegalArgumentException("Auth method must be provided")
-      )
-      .asInstanceOf[java.util.Map[String, Object]]
-      .asScala
-
-    val auth = if (authMap.keys.isEmpty) {
-      throw new IllegalArgumentException("At least one auth method must be provided")
-    } else if (authMap.keys.size > 1) {
-      throw new IllegalArgumentException("Multiple auth methods were found")
-    } else {
-      val authMethod = authMap.keys.head
-      AuthParserRegistry.get(authMethod).parse(authMap.head)
+  override def parse(cursor: ACursor): DataSink = {
+    val project = cursor.get[String]("Project") match {
+      case Right(project) => project
+      case Left(_) => throw new Exception()
     }
 
+    val dataset = cursor.get[String]("Dataset") match {
+      case Right(dataset) => dataset
+      case Left(_) => throw new Exception()
+    }
+
+    val table = cursor.get[String]("Table") match {
+      case Right(table) => table
+      case Left(_) => throw new Exception()
+    }
+
+    val auth = parseSubField[Auth](cursor = cursor, parserRegistry = AuthParserRegistry, fieldKey = "Auth")
+
     BigQuerySink(
-      project = map("Project").toString,
-      dataset = map("Dataset").toString,
-      table = map("Table").toString,
+      project = project,
+      dataset = dataset,
+      table = table,
       auth = auth,
       appendMode = Append() // TODO: Parse properly
     )

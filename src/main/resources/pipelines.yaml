@@ -1,10 +1,11 @@
 pipelines:
-  - PostgresToBigQuery:
-      DisplayName: "Postgres To BigQuery Pipeline"
-      Description: "Sample pipeline that reads data from a PostgreSQL database and writes it to BigQuery"
-      Id: "pg2bq_1"
+  - BasicDataPipeline:
+      Metadata:
+        DisplayName: "Postgres To BigQuery Pipeline"
+        Description: "Sample pipeline that reads data from a PostgreSQL database and writes it to BigQuery"
+        Id: "pg2bq_1"
       DataSource:
-        PostgreSQLSource:
+        PostgreSqlSource:
           Host: "localhost"
           Port: 5432
           Database: "Postgres"
@@ -17,19 +18,8 @@ pipelines:
         - RenameColumn:
           - OldColumnName: "user_email"
             NewColumnName: "email"
-        - WithColumn:
-            Name: "item_total_price"
-            Value: "item_price * item_quantity"
-        - DropColumn: "item_quantity"
-        - DropColumn: "item"
-        - GroupBy:
-            Columns:
-              - "user_id"
-            Aggregations:
-              - Count
-        - AddInsertTimestamp
       DataSink:
-        BigQueryConfig:
+        BigQuerySink:
           Project: "test-project"
           Dataset: "test-dataset"
           Table: "test-table"

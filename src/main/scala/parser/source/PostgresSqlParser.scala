@@ -1,41 +1,45 @@
 package parser.source
 
+import core.auth.Auth
 import core.source.{DataSource, PostgresSqlSource}
+import io.circe.ACursor
+import parser.Parser
 import parser.auth.AuthParserRegistry
+import parser.helpers.Helpers.parseSubField
 
-import scala.jdk.CollectionConverters.MapHasAsScala
-
-object PostgresSqlParser extends DataSourceParser {
+object PostgresSqlParser extends Parser[DataSource] {
   override def name: String = "PostgresSqlSource"
 
-  override def parse(value: Any): DataSource = {
-    val map = value
-      .asInstanceOf[java.util.Map[String, Object]]
-      .asScala
+  override def parse(cursor: ACursor): DataSource = {
+    val host = cursor.get[String]("Host") match {
+      case Right(host) => host
+      case Left(_) => throw new Exception()
+    }
 
-    val authMap = map
-      .getOrElse(
-        "Auth",
-        throw new IllegalArgumentException("Auth method must be provided")
-      )
-      .asInstanceOf[java.util.Map[String, Object]]
-      .asScala
+    val port = cursor.get[Int]("Port") match {
+      case Right(port) => port.toString
+      case Left(_) => throw new Exception()
+    }
 
-    val auth = if (authMap.keys.isEmpty) {
-      throw new IllegalArgumentException("At least one auth method must be provided")
-    } else if (authMap.keys.size > 1) {
-      throw new IllegalArgumentException("Multiple auth methods were found")
-    } else {
-      val authMethod = authMap.keys.head
-      AuthParserRegistry.get(authMethod).parse(authMap.head)
+    val database = cursor.get[String]("Database") match {
+      case Right(database) => database
+      case Left(_) => throw new Exception()
+    }
+
+    // Auth parsing
+    val auth = parseSubField[Auth](cursor = cursor, parserRegistry = AuthParserRegistry, fieldKey = "Auth")
+
+    val query = cursor.get[String]("RawQuery") match {
+      case Right(query) => query
+      case Left(_) => throw new Exception()
     }
 
     PostgresSqlSource(
-      host = map("Host").toString,
-      port = map("Port").toString,
-      database = map("Database").toString,
+      host = host,
+      port = port,
+      database = database,
       auth = auth,
-      query = map("RawQuery").toString
+      query = query
     )
   }
 }

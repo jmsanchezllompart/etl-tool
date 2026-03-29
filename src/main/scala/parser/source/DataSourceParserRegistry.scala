@@ -1,11 +1,14 @@
 package parser.source
 
-object DataSourceParserRegistry {
-  private val parsers: Map[String, DataSourceParser] = List(
+import core.source.DataSource
+import parser.{Parser, ParserRegistry}
+
+object DataSourceParserRegistry extends ParserRegistry[DataSource] {
+  private val parsers: Map[String, Parser[DataSource]] = List(
     PostgresSqlParser
   ).map(p => p.name -> p).toMap
 
-  def get(name: String): DataSourceParser =
+  def get(name: String): Parser[DataSource] =
     parsers.getOrElse(
       name,
       throw new IllegalArgumentException(s"Unknown data source: $name")

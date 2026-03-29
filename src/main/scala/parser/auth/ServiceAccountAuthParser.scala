@@ -1,19 +1,20 @@
 package parser.auth
 
 import core.auth.{Auth, ServiceAccountAuth}
+import io.circe.ACursor
+import parser.Parser
 
-import scala.jdk.CollectionConverters.MapHasAsScala
-
-object ServiceAccountAuthParser extends AuthParser {
+object ServiceAccountAuthParser extends Parser[Auth] {
   override def name: String = "ServiceAccountAuth"
 
-  override def parse(value: Any): Auth = {
-    val map = value
-      .asInstanceOf[java.util.Map[String, Object]]
-      .asScala
+  override def parse(cursor: ACursor): Auth = {
+    val serviceAccountFile = cursor.get[String]("ServiceAccountFile") match {
+      case Right(serviceAccountFile) => serviceAccountFile
+      case Left(_) => throw new Exception()
+    }
 
     ServiceAccountAuth(
-      serviceAccountFile = map("ServiceAccountAuth").toString
+      serviceAccountFile = serviceAccountFile
     )
   }
 }
