@@ -36,6 +36,5 @@ pipelines:
           Auth:
             ServiceAccountAuth:
               ServiceAccountFile: "opt/shared/service_accounts/testing_service_accounts.json"
-          MergeQuery:
-            UniqueKey:
-              - "user_id"
+          AppendMode:
+            Overwrite
