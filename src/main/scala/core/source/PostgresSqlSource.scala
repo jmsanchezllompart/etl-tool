@@ -1,6 +1,6 @@
 package core.source
 
-import core.auth.{Auth, BasicAuth, ServiceAccountFile}
+import core.auth.{Auth, BasicAuth}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SparkSession
 

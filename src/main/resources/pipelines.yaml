@@ -4,13 +4,14 @@ pipelines:
       Description: "Sample pipeline that reads data from a PostgreSQL database and writes it to BigQuery"
       Id: "pg2bq_1"
       DataSource:
-        PostgreSQLConfig:
+        PostgreSQLSource:
           Host: "localhost"
           Port: 5432
           Database: "Postgres"
-          BasicAuth:
-            User: "admin"
-            Password: "root"
+          Auth:
+            BasicAuth:
+              User: "admin"
+              Password: "root"
           RawQuery: "SELECT user_id, order_id, order_date, item_price, item_id, item_quantity FROM order_items;"
       Transformations:
         - RenameColumn:
@@ -32,8 +33,9 @@ pipelines:
           Project: "test-project"
           Dataset: "test-dataset"
           Table: "test-table"
-          ServiceAccountAuth:
-            ServiceAccountFile: "opt/shared/service_accounts/testing_service_accounts.json"
+          Auth:
+            ServiceAccountAuth:
+              ServiceAccountFile: "opt/shared/service_accounts/testing_service_accounts.json"
           MergeQuery:
             UniqueKey:
               - "user_id"
