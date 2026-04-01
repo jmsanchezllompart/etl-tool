@@ -1,14 +1,13 @@
 package parser.source
 
-
 import core.auth.BasicAuth
-import core.source.MySqlSource
+import core.source.SqlServerSource
 import io.circe.parser.parse
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
-  "MySqlSourceParser" should "parse valid JSON into MySqlSource" in {
+class SqlServerSourceParserSpec extends AnyFlatSpec with Matchers {
+  "SqlServerSourceParser" should "parse valid JSON into SqlServerSource" in {
     val json =
       """
         |{
@@ -27,9 +26,9 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
 
     val cursor = parse(json).toOption.get.hcursor
 
-    val result = MySqlSourceParser.parse(cursor)
+    val result = SqlServerSourceParser.parse(cursor)
 
-    result shouldBe MySqlSource(
+    result shouldBe SqlServerSource(
       host = "localhost",
       port = "3306",
       database = "test_db",
@@ -57,7 +56,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
     val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
-      MySqlSourceParser.parse(cursor)
+      SqlServerSourceParser.parse(cursor)
     }
 
     ex.getMessage should include("Host")
@@ -82,7 +81,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
     val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
-      MySqlSourceParser.parse(cursor)
+      SqlServerSourceParser.parse(cursor)
     }
 
     ex.getMessage should include("Port")
@@ -107,7 +106,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
     val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
-      MySqlSourceParser.parse(cursor)
+      SqlServerSourceParser.parse(cursor)
     }
 
     ex.getMessage should include("Database")
@@ -132,7 +131,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
     val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
-      MySqlSourceParser.parse(cursor)
+      SqlServerSourceParser.parse(cursor)
     }
 
     ex.getMessage should include("RawQuery")
@@ -153,7 +152,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
     val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
-      MySqlSourceParser.parse(cursor)
+      SqlServerSourceParser.parse(cursor)
     }
 
     ex.getMessage should include("Auth")

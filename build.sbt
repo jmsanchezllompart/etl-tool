@@ -1,4 +1,4 @@
-ThisBuild / version := "0.1.1-SNAPSHOT"
+ThisBuild / version := "0.1.2-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.18"
 
@@ -24,6 +24,8 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "42.7.10",
   // MySql
   "com.mysql" % "mysql-connector-j" % "9.6.0",
+  // SQL Server
+  "com.microsoft.sqlserver" % "mssql-jdbc" % "13.4.0.jre11",
   // Tests
   "org.scalatest" %% "scalatest" % "3.2.20" % Test,
   "org.mockito" %% "mockito-scala" % "2.1.0" % Test,
