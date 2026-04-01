@@ -10,12 +10,16 @@ object RenameColumnParser extends Parser[Transformation] {
   override def parse(cursor: ACursor): Transformation = {
     val oldName = cursor.get[String]("OldColumnName") match {
       case Right(oldName) => oldName
-      case Left(_) => throw new Exception()
+      case Left(error) => throw new IllegalArgumentException(
+        s"[RenameColumnParser] Missing or invalid 'OldColumnName' field: ${error.getMessage}"
+      )
     }
 
     val newName = cursor.get[String]("NewColumnName") match {
       case Right(newName) => newName
-      case Left(_) => throw new Exception()
+      case Left(error) => throw new IllegalArgumentException(
+        s"[RenameColumnParser] Missing or invalid 'NewColumnName' field: ${error.getMessage}"
+      )
     }
 
     RenameColumn(
