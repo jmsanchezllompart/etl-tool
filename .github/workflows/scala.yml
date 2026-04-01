@@ -29,8 +29,8 @@ jobs:
         cache: 'sbt'
     - name: Install sbt
       run: |
-        apt-get update
-        apt-get install -y sbt
+        sudo apt-get update
+        sudo apt-get install -y sbt
     - name: Run tests
       run: sbt test
       # Optional: This step uploads information to the GitHub dependency graph and unblocking Dependabot alerts for the repository
