@@ -29,4 +29,4 @@ case class Overwrite() extends AppendMode
  *
  * @param idFields the list of field names used to identify records for merging
  */
-case class Merge(idFields: List[String]) extends AppendModeppendMode
+case class Merge(idFields: List[String]) extends AppendMode
