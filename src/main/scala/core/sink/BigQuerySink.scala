@@ -17,13 +17,6 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
  *                   It must extend [[core.sink.AppendMode]] and it supports `Append`, `Overwrite` and `Merge` modes
  * @example
  * {{{
- * implicit val spark: SparkSession = SparkSession.builder().getOrCreate()
- *
- * val df = val df = Seq(
- *   (1, "Alice"),
- *   (2, "Bob")
- * ).toDF("id", "name")
- *
  * val sink = BigQuerySink(
  *   project = "test-project",
  *   dataset = "test-dataset",
