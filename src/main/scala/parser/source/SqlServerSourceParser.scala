@@ -7,6 +7,33 @@ import parser.Parser
 import parser.auth.AuthParserRegistry
 import parser.helpers.Helpers.parseSubField
 
+/**
+ * Parser implementation for constructing a [[SqlServerSource]] from a JSON configuration.
+ *
+ * This parser reads required fields from a Circe [[io.circe.ACursor]] and converts them
+ * into a fully configured [[SqlServerSource]] instance.
+ *
+ * Expected JSON structure:
+ * {{{
+ * {
+ *   "Host": "localhost",
+ *   "Port": 3306,
+ *   "Database": "my_db",
+ *   "Auth": { ... },
+ *   "RawQuery": "SELECT * FROM table"
+ * }
+ * }}}
+ *
+ * Fields:
+ *  - Host (String): SQL Server hostname or IP
+ *  - Port (Int): SQL Server port
+ *  - Database (String): Target database name
+ *  - Auth (Object): Authentication configuration (delegated to [[AuthParserRegistry]])
+ *  - RawQuery (String): SQL query to execute
+ *
+ * @throws IllegalArgumentException if any required field is missing or invalid
+ *                                  or if authentication parsing fails
+ */
 object SqlServerSourceParser extends Parser[DataSource] {
   /** Identifier for this parser, used in parser registries. */
   override def name: String = "SqlServerSource"
