@@ -10,6 +10,8 @@ lazy val root = (project in file("."))
 val sparkVersion = "4.1.1"
 
 libraryDependencies ++= Seq(
+  // CLI Parameters
+  "com.github.scopt" %% "scopt" % "4.1.0",
   // YAML Parsing
   "io.circe" %% "circe-yaml" % "1.15.0",
   // Spark
@@ -19,3 +21,18 @@ libraryDependencies ++= Seq(
   // PostgresSql
   "org.postgresql" % "postgresql" % "42.7.10"
 )
+
+// Assembly
+assembly / test := {}
+assembly / assemblyJarName := s"${name.value}.jar"
+
+assembly / assemblyOption := (assembly / assemblyOption).value
+  .withIncludeScala(false)
+
+assembly / assemblyMergeStrategy := {
+  case p if p.endsWith("reference.conf") => MergeStrategy.concat
+  case p if p.endsWith("application.conf") => MergeStrategy.concat
+  case PathList("META-INF", _@_*) => MergeStrategy.discard
+  case PathList("development", _@_*) => MergeStrategy.discard
+  case _ => MergeStrategy.first
+}
