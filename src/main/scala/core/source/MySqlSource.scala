@@ -2,6 +2,7 @@ package core.source
 
 import core.auth.{Auth, BasicAuth}
 import org.apache.spark.sql.{DataFrame, SparkSession}
+
 /**
  * A [[DataSource]] implementation for reading data from a MySQL database using JDBC.
  *
