@@ -12,6 +12,8 @@ val sparkVersion = "4.1.1"
 libraryDependencies ++= Seq(
   // CLI Parameters
   "com.github.scopt" %% "scopt" % "4.1.0",
+  // JSON Parsing
+  "io.circe" %% "circe-parser" % "0.14.15",
   // YAML Parsing
   "io.circe" %% "circe-yaml" % "1.15.0",
   // Spark
