@@ -18,7 +18,7 @@ import parser.{Parser, ParserRegistry}
  * Example usage:
  * {{{
  *   val parser = DataSinkParserRegistry.get("BigQuerySink")
- *   val source = parser.parse(cursor)
+ *   val sink = parser.parse(cursor)
  * }}}
  */
 object DataSinkParserRegistry extends ParserRegistry[DataSink] {
