@@ -55,7 +55,7 @@ case class MySqlSource
 
     val (user, password) = auth match {
       case BasicAuth(user, password) => (user, password)
-      case _ => throw new UnsupportedOperationException(s"Unsupported auth method for PostgresSQL Data Source")
+      case _ => throw new UnsupportedOperationException(s"Unsupported auth method for MySQL Data Source")
     }
 
     sparkSession.read
