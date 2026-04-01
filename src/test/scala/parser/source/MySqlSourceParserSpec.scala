@@ -25,7 +25,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
 
-    val cursor = parse(json).right.get.hcursor
+    val cursor = parse(json).toOption.get.hcursor
 
     val result = MySqlSourceParser.parse(cursor)
 
@@ -54,7 +54,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
 
-    val cursor = parse(json).right.get.hcursor
+    val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
       MySqlSourceParser.parse(cursor)
@@ -79,7 +79,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
 
-    val cursor = parse(json).right.get.hcursor
+    val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
       MySqlSourceParser.parse(cursor)
@@ -104,7 +104,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
 
-    val cursor = parse(json).right.get.hcursor
+    val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
       MySqlSourceParser.parse(cursor)
@@ -129,7 +129,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
 
-    val cursor = parse(json).right.get.hcursor
+    val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
       MySqlSourceParser.parse(cursor)
@@ -150,7 +150,7 @@ class MySqlSourceParserSpec extends AnyFlatSpec with Matchers {
         |}
         |""".stripMargin
 
-    val cursor = parse(json).right.get.hcursor
+    val cursor = parse(json).toOption.get.hcursor
 
     val ex = intercept[IllegalArgumentException] {
       MySqlSourceParser.parse(cursor)
