@@ -19,7 +19,12 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql" % sparkVersion,
   "org.apache.spark" %% "spark-mllib" % sparkVersion,
   // PostgresSql
-  "org.postgresql" % "postgresql" % "42.7.10"
+  "org.postgresql" % "postgresql" % "42.7.10",
+  // MySql
+  "com.mysql" % "mysql-connector-j" % "9.6.0",
+  // Tests
+  "org.scalatest" %% "scalatest" % "3.2.20" % Test,
+  "org.mockito" %% "mockito-scala" % "2.1.0" % Test,
 )
 
 // Assembly
