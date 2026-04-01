@@ -7,7 +7,7 @@ import parser.Parser
 import parser.auth.AuthParserRegistry
 import parser.helpers.Helpers.parseSubField
 
-object PostgresSqlParser extends Parser[DataSource] {
+object PostgresSqlSourceParser extends Parser[DataSource] {
   override def name: String = "PostgresSqlSource"
 
   override def parse(cursor: ACursor): DataSource = {

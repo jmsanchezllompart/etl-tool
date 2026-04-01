@@ -5,7 +5,7 @@ import parser.{Parser, ParserRegistry}
 
 object DataSourceParserRegistry extends ParserRegistry[DataSource] {
   private val parsers: Map[String, Parser[DataSource]] = List(
-    PostgresSqlParser,
+    PostgresSqlSourceParser,
     MySqlSourceParser,
     SqlServerSourceParser
   ).map(p => p.name -> p).toMap
