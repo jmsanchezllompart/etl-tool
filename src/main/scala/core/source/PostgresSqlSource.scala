@@ -68,7 +68,7 @@ case class PostgresSqlSource
       .option("driver", "org.postgresql.Driver")
       .option("user", user)
       .option("password", password)
-      .option("dbtable", s"($query) AS subquery") // Important: wrap query as subquery
+      .option("dbtable", s"($query) as subquery") // Important: wrap query as subquery
       .load()
   }
 }
