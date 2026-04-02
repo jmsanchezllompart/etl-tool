@@ -1,7 +1,7 @@
 package core.transformation
 
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.classic.SparkSession
+import org.apache.spark.sql.SparkSession
 
 /**
  * A transformation that renames a column in a [[DataFrame]].
