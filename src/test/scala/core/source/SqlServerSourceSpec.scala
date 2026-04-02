@@ -54,17 +54,4 @@ class SqlServerSourceSpec extends AnyFlatSpec with Matchers {
       source.read()(spark)
     }
   }
-
-  it should "correctly format JDBC URL" in {
-    val source = SqlServerSource(
-      host = "my-host",
-      port = "1234",
-      database = "my-db",
-      auth = BasicAuth("u", "p"),
-      query = "SELECT 1"
-    )
-
-    val jdbcUrl = s"jdbc:sqlserver://${source.host}:${source.port};databaseName=${source.database}"
-    jdbcUrl shouldBe "jdbc:sqlserver://my-host:1234;databaseName=my-db"
-  }
 }

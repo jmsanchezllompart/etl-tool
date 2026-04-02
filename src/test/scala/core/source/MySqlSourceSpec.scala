@@ -54,18 +54,4 @@ class MySqlSourceSpec extends AnyFlatSpec with Matchers {
       source.read()(spark)
     }
   }
-
-  it should "correctly format JDBC URL" in {
-    val source = MySqlSource(
-      host = "my-host",
-      port = "1234",
-      database = "my-db",
-      auth = BasicAuth("u", "p"),
-      query = "SELECT 1"
-    )
-
-    val jdbcUrl = s"jdbc:mysql://${source.host}:${source.port}/${source.database}"
-    jdbcUrl shouldBe "jdbc:mysql://my-host:1234/my-db"
-  }
-
 }
