@@ -1,7 +1,6 @@
 package core.transformation
 
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 /**
  * Represents a transformation applied to a [[DataFrame]].
