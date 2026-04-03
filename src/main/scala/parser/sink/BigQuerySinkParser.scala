@@ -1,9 +1,10 @@
 package parser.sink
 
 import core.auth.Auth
-import core.sink.{Append, BigQuerySink, DataSink}
+import core.sink.{AppendMode, BigQuerySink, DataSink}
 import io.circe.ACursor
 import parser.Parser
+import parser.appendmode.AppendModeParserRegistry
 import parser.auth.AuthParserRegistry
 import parser.helpers.Helpers.parseSubField
 
@@ -91,12 +92,27 @@ object BigQuerySinkParser extends Parser[DataSink] {
           )
       }
 
+    val appendMode =
+      try {
+        parseSubField[AppendMode](
+          cursor = cursor,
+          parserRegistry = AppendModeParserRegistry,
+          fieldKey = "AppendMode"
+        )
+      } catch {
+        case e: Exception =>
+          throw new IllegalArgumentException(
+            s"[BigQuerySinkParser] Failed to parse 'AppendMode' field: ${e.getMessage}",
+            e
+          )
+      }
+
     BigQuerySink(
       project = project,
       dataset = dataset,
       table = table,
       auth = auth,
-      appendMode = Append() // TODO: Parse properly
+      appendMode = appendMode
     )
   }
 }

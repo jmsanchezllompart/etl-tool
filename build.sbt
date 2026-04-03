@@ -26,6 +26,8 @@ libraryDependencies ++= Seq(
   "com.mysql" % "mysql-connector-j" % "9.6.0",
   // SQL Server
   "com.microsoft.sqlserver" % "mssql-jdbc" % "13.4.0.jre11",
+  // BigQuery
+  "com.google.cloud.spark" %% "spark-bigquery-with-dependencies" % "0.44.1",
   // Tests
   "org.scalatest" %% "scalatest" % "3.2.20" % Test,
   "org.mockito" %% "mockito-scala" % "2.1.0" % Test,
