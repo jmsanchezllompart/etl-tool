@@ -35,9 +35,7 @@ import parser.helpers.Helpers.parseSubField
  *                                  or if authentication parsing fails
  */
 object PostgresSqlSourceParser extends Parser[DataSource] {
-  /**
-   * Internal map of parser name to parser instance.
-   */
+  /** Identifier for this parser, used in parser registries. */
   override def name: String = "PostgresSqlSource"
 
   /**
