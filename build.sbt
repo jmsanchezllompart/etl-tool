@@ -1,4 +1,4 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / version := "0.1.2-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.18"
 
@@ -12,6 +12,8 @@ val sparkVersion = "4.1.1"
 libraryDependencies ++= Seq(
   // CLI Parameters
   "com.github.scopt" %% "scopt" % "4.1.0",
+  // JSON Parsing
+  "io.circe" %% "circe-parser" % "0.14.15",
   // YAML Parsing
   "io.circe" %% "circe-yaml" % "1.15.0",
   // Spark
@@ -19,7 +21,16 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql" % sparkVersion,
   "org.apache.spark" %% "spark-mllib" % sparkVersion,
   // PostgresSql
-  "org.postgresql" % "postgresql" % "42.7.10"
+  "org.postgresql" % "postgresql" % "42.7.10",
+  // MySql
+  "com.mysql" % "mysql-connector-j" % "9.6.0",
+  // SQL Server
+  "com.microsoft.sqlserver" % "mssql-jdbc" % "13.4.0.jre11",
+  // BigQuery
+  "com.google.cloud.spark" %% "spark-bigquery-with-dependencies" % "0.44.1",
+  // Tests
+  "org.scalatest" %% "scalatest" % "3.2.20" % Test,
+  "org.mockito" %% "mockito-scala" % "2.1.0" % Test,
 )
 
 // Assembly
