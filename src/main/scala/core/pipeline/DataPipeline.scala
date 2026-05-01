@@ -3,6 +3,7 @@ package core.pipeline
 import core.sink.DataSink
 import core.source.DataSource
 import core.transformation.Transformation
+import org.apache.spark.sql.SparkSession
 
 /**
  * Represents a complete data pipeline.
@@ -34,4 +35,16 @@ case class DataPipeline
   source: DataSource,
   transformations: List[Transformation],
   sink: DataSink
-)
+) {
+  def run()(implicit sparkSession: SparkSession): Unit = {
+    print(s"Loading ${metadata.displayName} pipeline")
+
+    val rawData = source.read()
+
+    val transformedData = transformations.foldLeft(rawData) {
+      (df, transformation) => transformation.transform(df)
+    }
+
+    sink.write(transformedData)
+  }
+}
