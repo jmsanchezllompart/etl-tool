@@ -11,7 +11,7 @@ DataSource:
       BasicAuth:
         User: "admin"
         Password: "root"
-    RawQuery: "SELECT user_id, user_email, order_id, order_date, item_price, item_id, item_quantity FROM order_items;"
+    RawQuery: "SELECT user_id, user_email, order_id, order_date, item_price, item_id, item_quantity FROM order_items"
 Transformations:
   - RenameColumn:
       OldColumnName: "user_id"
@@ -28,4 +28,4 @@ DataSink:
       ServiceAccountAuth:
         ServiceAccountFile: "opt/shared/service_accounts/testing_service_accounts.json"
     AppendMode:
-      Overwrite
+      Overwrite: {}

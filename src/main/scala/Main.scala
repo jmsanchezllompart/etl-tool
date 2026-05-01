@@ -1,51 +1,48 @@
+import cli.command.{BaseCommandConfig, CheckCommand, CheckCommandConfig, RunCommand, RunCommandConfig}
+import scopt.OParser
 import io.circe.yaml
+import org.apache.spark.sql.SparkSession
 import parser.pipeline.DataPipelineParser
 
+import scala.io.Source
+
+case class Config() extends BaseCommandConfig
 
 object Main {
+
   def main(args: Array[String]): Unit = {
-    val json = yaml.parser.parse(
-    """
-      Metadata:
-        DisplayName: "Postgres To BigQuery Pipeline"
-        Description: "Sample pipeline that reads data from a PostgreSQL database and writes it to BigQuery"
-        Id: "pg2bq_1"
-      DataSource:
-        PostgresSqlSource:
-          Host: "localhost"
-          Port: 5432
-          Database: "Postgres"
-          Auth:
-            BasicAuth:
-              User: "admin"
-              Password: "root"
-          RawQuery: "SELECT user_id, user_email, order_id, order_date, item_price, item_id, item_quantity FROM order_items;"
-      Transformations:
-        - RenameColumn:
-            OldColumnName: "user_id"
-            NewColumnName: "user"
-        - RenameColumn:
-            OldColumnName: "user_email"
-            NewColumnName: "email"
-      DataSink:
-        BigQuerySink:
-          Project: "test-project"
-          Dataset: "test-dataset"
-          Table: "test-table"
-          Auth:
-            ServiceAccountAuth:
-              ServiceAccountFile: "opt/shared/service_accounts/testing_service_accounts.json"
-          AppendMode:
-            Overwrite
-    """)
-    val scalaJson = json match {
-      case Right(json) => json
-      case Left(_) => throw new Exception
+    val builder = OParser.builder[BaseCommandConfig]
+    val parser = {
+      import builder._
+      OParser.sequence(
+        programName("etl-tool"),
+        head("etl-tool", "0.1.0-SNAPSHOT"),
+        RunCommand.build(),
+        CheckCommand.build()
+      )
     }
 
-    val root = scalaJson.hcursor
+    // OParser.parse returns Option[Config]
+    OParser.parse(parser, args, Config()).get match {
+      case RunCommandConfig(yamlFile) =>
+        implicit val sparkSession: SparkSession = SparkSession.builder()
+          .appName("etl-tool")
+          .master("local[*]") // run locally using all cores
+          .getOrCreate()
+        val yamlSource = Source.fromFile(yamlFile)
+        val json = yaml.parser.parse(yamlSource.mkString).getOrElse(throw new Exception)
+        yamlSource.close()
+        val pipeline = DataPipelineParser.parse(json.hcursor.root)
+        pipeline.run()
 
-    val pipeline = DataPipelineParser.parse(root)
+      case CheckCommandConfig(yamlFile) =>
+        val yamlSource = Source.fromFile(yamlFile)
+        val json = yaml.parser.parse(yamlSource.mkString).getOrElse(throw new Exception)
+        yamlSource.close()
+        DataPipelineParser.parse(json.hcursor.root)
+      case _ =>
+      // arguments are bad, error message will have been displayed
+    }
   }
 }
 
